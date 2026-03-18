@@ -1,0 +1,205 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TrollStore</title>
+    <style>
+        :root {
+            --ios-bg: #f2f2f7;
+            --ios-blue: #007aff;
+            --ios-secondary: #8e8e93;
+            --ios-separator: #c6c6c8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background-color: var(--ios-bg);
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(242, 242, 247, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid var(--ios-separator);
+            padding-top: env(safe-area-inset-top, 44px);
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px 10px 16px;
+            height: 44px;
+        }
+
+        h1 {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .add-btn {
+            color: var(--ios-blue);
+            font-size: 32px;
+            cursor: pointer;
+            line-height: 0;
+            margin-bottom: 8px;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 200px);
+        }
+
+        .empty-text {
+            color: var(--ios-secondary);
+            font-size: 17px;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* Tab Bar */
+        nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(249, 249, 249, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid var(--ios-separator);
+            display: flex;
+            padding-bottom: env(safe-area-inset-bottom, 15px);
+            padding-top: 8px;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--ios-secondary);
+            font-size: 10px;
+            font-weight: 500;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--ios-blue);
+        }
+
+        /* SVG Icons Styling */
+        .icon-svg {
+            width: 26px;
+            height: 26px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-item.active .icon-svg {
+            stroke-width: 2; /* Жирность для активной иконки */
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-top">
+        <h1 id="page-title">Apps</h1>
+        <div class="add-btn" onclick="document.getElementById('file-input').click()">＋</div>
+    </div>
+</header>
+
+<input type="file" id="file-input" accept=".ipa">
+
+<div id="apps" class="screen active">
+    <svg class="icon-svg" style="width: 60px; height: 60px; opacity: 0.2;" viewBox="0 0 24 24">
+        <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+        <path d="M7 12l3 3 7-7"></path>
+    </svg>
+    <p class="empty-text">No apps installed.<br>Tap the + button to install an IPA file.</p>
+</div>
+
+<div id="search" class="screen">
+    <p class="empty-text">Search functionality is not available yet.</p>
+</div>
+
+<div id="settings" class="screen">
+    <p class="empty-text">TrollStore Settings</p>
+</div>
+
+<nav>
+    <a href="javascript:void(0)" class="nav-item active" onclick="switchTab('apps', 'Apps', this)">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+        <span>Apps</span>
+    </a>
+    <a href="javascript:void(0)" class="nav-item" onclick="switchTab('search', 'Search', this)">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>Search</span>
+    </a>
+    <a href="javascript:void(0)" class="nav-item" onclick="switchTab('settings', 'Settings', this)">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Settings</span>
+    </a>
+</nav>
+
+<script>
+    function switchTab(tabId, title, element) {
+        // Убираем активный класс у всех экранов и кнопок
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        
+        // Активируем нужный экран
+        document.getElementById(tabId).classList.add('active');
+        element.classList.add('active');
+        
+        // Меняем заголовок
+        document.getElementById('page-title').innerText = title;
+    }
+
+    // Обработка выбора файла
+    document.getElementById('file-input').addEventListener('change', function(e) {
+        if(this.files[0]) {
+            alert('Выбран файл: ' + this.files[0].name + '\nВ настоящем TrollStore здесь началась бы установка.');
+        }
+    });
+</script>
+
+</body>
+</html>
